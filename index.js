@@ -83,8 +83,14 @@ function endpoints(mirror){
     c = Math.cos(mirror.angle)
     s = Math.sin(mirror.angle)
     return {
-        p0: {x: mirror.pos.x + c*mirror.width/2, y: mirror.pos.y + s*mirror.width/2},
-        p1: {x: mirror.pos.x - c*mirror.width/2, y: mirror.pos.y - s*mirror.width/2}
+        p0: {
+            x: mirror.pos.x + c*mirror.width/2,
+            y: mirror.pos.y + s*mirror.width/2
+        },
+        p1: {
+            x: mirror.pos.x - c*mirror.width/2,
+            y: mirror.pos.y - s*mirror.width/2
+        }
     }
 }
 
