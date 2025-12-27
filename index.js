@@ -88,6 +88,49 @@ function endpoints(mirror){
     }
 }
 
+// Draw a mirror as an arc segment.  In drawMirrorArea, I simulate being curved
+// by reflecting the lines at the edges along a normal that is adjusted as if
+// the mirror was curved  I defined 'mirror.curvature' as an angle offset from
+// 'mirror.angle' property.
+//
+// In this function, I use mirror.curvature as 1/radius: Indeed, a curvature of
+// 0 makes the mirror a straight line and a more curved mirror means a smaller
+// radius.
+// With radius being 1/mirror.curvature, we need to find the center of the arc
+// so that the circle is tangent to the original straight line of the mirror.
+//
+// I'm putting that on hold for now because anyway, the curvature of a real
+// mirror is imperceptible except for the change in the reflected area which
+// I am modelling in a much simpler way having the normal at the edges be
+// slightly offset form the normal in the center.
+function drawArcMirror(mirror){
+    N = normal(mirror.angle)
+    mirrorCenter = {
+        x: mirror.pos.x - 1/mirror.curvature * N.x,
+        y: mirror.pos.y - 1/mirror.curvature * N.y,
+    }
+    mirrorSweepAngle = mirror.width * mirror.curvature
+    ctx.beginPath()
+    ctx.arc(
+        mirrorCenter.x,
+        mirrorCenter.y,
+        1/mirror.curvature,
+        Math.PI/2 + mirror.angle - mirrorSweepAngle/2,
+        Math.PI/2 + mirror.angle + mirrorSweepAngle/2
+    )
+    ctx.fillStyle = "blue"
+    ctx.fill()
+}
+
+function getMirrorCenter(mirror){
+    N = normal(mirror.angle)
+    return {
+        x: mirror.pos.x - 1/mirror.curvature * N.x,
+        y: mirror.pos.y - 1/mirror.curvature * N.y,
+    }
+
+}
+
 function drawMirror(mirror){
     ep = endpoints(mirror)
     drawLineSegment(ep.p0, ep.p1, "green", 3)
