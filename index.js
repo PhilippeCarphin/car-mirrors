@@ -11,42 +11,36 @@ canvas = document.getElementById("disp")
 centerSlider = document.getElementById("centerSlider")
 centerSlider.oninput = function () {
     model.centerMirror.angle = this.value / 100.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 rightSlider = document.getElementById("rightSlider")
 rightSlider.oninput = function () {
     model.rightMirror.angle = this.value / 100.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 leftSlider = document.getElementById("leftSlider")
 leftSlider.oninput = function () {
     model.leftMirror.angle = this.value / 100.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 centerCurvatureSlider = document.getElementById("centerCurvatureSlider")
 centerCurvatureSlider.oninput = function () {
     model.centerMirror.curvature = this.value / 20.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 rightCurvatureSlider = document.getElementById("rightCurvatureSlider")
 rightCurvatureSlider.oninput = function () {
     model.rightMirror.curvature = this.value / 20.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 leftCurvatureSlider = document.getElementById("leftCurvatureSlider")
 leftCurvatureSlider.oninput = function () {
     model.leftMirror.curvature = this.value / 20.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
@@ -54,41 +48,32 @@ leftCurvatureSlider.oninput = function () {
 centerWidthSlider = document.getElementById("centerWidthSlider")
 centerWidthSlider.oninput = function () {
     model.centerMirror.width = this.value
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 rightWidthSlider = document.getElementById("rightWidthSlider")
 rightWidthSlider.oninput = function () {
     model.rightMirror.width = this.value
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 leftWidthSlider = document.getElementById("leftWidthSlider")
 leftWidthSlider.oninput = function () {
     model.leftMirror.width = this.value
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 
 headXOffset = document.getElementById("headXOffset")
 headXOffset.oninput = function () {
     model.head.x = headBase.x + this.value / 3.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 headYOffset = document.getElementById("headYOffset")
 headYOffset.oninput = function () {
     model.head.y = headBase.y + this.value / 3.0
-    ctx.clearRect(0, 0, canvas.height, canvas.width)
     draw()
 }
 ctx = canvas.getContext("2d")
-
-function onCenterMirrorSlider() {
-
-}
 
 function normal(angle) {
     return {x: -Math.sin(angle), y: Math.cos(angle)}
@@ -166,8 +151,8 @@ function drawLineSegment(p0, p1, color, width){
     ctx.stroke()
 }
 
-
 function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     drawHead()
     drawMirror(model.leftMirror)
     drawMirror(model.rightMirror)
@@ -177,4 +162,3 @@ function draw(){
     drawMirrorArea(model.head, model.rightMirror, "brown")
 }
 draw()
-
