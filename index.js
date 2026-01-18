@@ -1,6 +1,10 @@
 headBase = {x: 70, y:70}
 model = {
     head: {x:headBase.x, y:headBase.y},
+    // TODO: angle: {value: 1.88, min: N, max: N}
+    //       then I have to add the sliders using JS maybe
+    //       or create them in HTML but set their min/max values using JS
+    //       If I do that I'll have everything setup here
     centerMirror: {pos: {x: 100, y: 30}, angle: 1.88, width: 20, curvature: 0},
     leftMirror: {pos: {x: 40, y: 30}, angle: 1.40, width: 20, curvature: 0},
     rightMirror: {pos: {x: 210, y: 30}, angle: 2.24, width: 20, curvature: 0},
@@ -8,21 +12,38 @@ model = {
 
 
 canvas = document.getElementById("disp")
+
+sanvas = document.getElementById("sdisp")
+
+head = document.getElementById("head")
+
+centerMirror = document.getElementById("center-mirror")
+centerMirrorAC = document.getElementById("center-mirror-ac")
+centerMirrorAR = document.getElementById("center-mirror-ar")
+centerMirrorAL = document.getElementById("center-mirror-al")
+
+
+leftMirror = document.getElementById("left-mirror")
+rightMirror = document.getElementById("right-mirror")
+
 centerSlider = document.getElementById("centerSlider")
 centerSlider.oninput = function () {
     model.centerMirror.angle = this.value / 100.0
+    updateSVGMirrors()
     draw()
 }
 
 rightSlider = document.getElementById("rightSlider")
 rightSlider.oninput = function () {
     model.rightMirror.angle = this.value / 100.0
+    updateSVGMirrors()
     draw()
 }
 
 leftSlider = document.getElementById("leftSlider")
 leftSlider.oninput = function () {
     model.leftMirror.angle = this.value / 100.0
+    updateSVGMirrors()
     draw()
 }
 
@@ -48,6 +69,7 @@ leftCurvatureSlider.oninput = function () {
 centerWidthSlider = document.getElementById("centerWidthSlider")
 centerWidthSlider.oninput = function () {
     model.centerMirror.width = this.value
+    updateSVGMirrors()
     draw()
 }
 
@@ -66,12 +88,14 @@ leftWidthSlider.oninput = function () {
 headXOffset = document.getElementById("headXOffset")
 headXOffset.oninput = function () {
     model.head.x = headBase.x + this.value / 3.0
-    draw()
+    updateSVGHead()
+    draw() // Not necessary for SVG
 }
 headYOffset = document.getElementById("headYOffset")
 headYOffset.oninput = function () {
     model.head.y = headBase.y + this.value / 3.0
-    draw()
+    updateSVGHead()
+    draw() // Not necessary for SVG
 }
 ctx = canvas.getContext("2d")
 
@@ -128,13 +152,53 @@ function drawArcMirror(mirror){
     ctx.fill()
 }
 
+// Function used for drawing a mirror as an arc segment: this function finds
+// the center of the circle used for this arc segment.
 function getMirrorCenter(mirror){
     N = normal(mirror.angle)
     return {
         x: mirror.pos.x - 1/mirror.curvature * N.x,
         y: mirror.pos.y - 1/mirror.curvature * N.y,
     }
+}
 
+function updateSVGMirrors(){
+
+    // update the mirror itself
+    cep = endpoints(model.centerMirror)
+    centerMirror.setAttribute("x1", cep.p0.x)
+    centerMirror.setAttribute("y1", cep.p0.y)
+    centerMirror.setAttribute("x2", cep.p1.x)
+    centerMirror.setAttribute("y2", cep.p1.y)
+
+    // Update the middle path head -> mirror center and its reflection
+    headToCenterMirrorCenter = {
+        x: model.centerMirror.pos.x - model.head.x,
+        y: model.centerMirror.pos.y - model.head.y
+    }
+    reflectedHeadToCenterMirrorCenter = reflectDirection(headToCenterMirrorCenter, normal(model.centerMirror.angle))
+    const xf = model.centerMirror.pos.x + 4 * reflectedHeadToCenterMirrorCenter.x
+    const yf = model.centerMirror.pos.y + 4 * reflectedHeadToCenterMirrorCenter.y
+    d = `M ${model.head.x} ${model.head.y} L ${model.centerMirror.pos.x} ${model.centerMirror.pos.y} L ${xf} ${yf}`
+    centerMirrorAC.setAttribute("d", d)
+
+    // TODO: Same thing for path head -> mirror first endpoint and its reflection
+    // TODO: Same thing for path head -> mirror second endpoint and its reflection
+
+    // Final todo: stare at this and generalize to other mirrors maybe something
+    // like updateMirror(htmlElement, modelMirror) until then, I'll at least
+    // place the mirrors:
+    rep = endpoints(model.rightMirror)
+    rightMirror.setAttribute("x1", rep.p0.x)
+    rightMirror.setAttribute("y1", rep.p0.y)
+    rightMirror.setAttribute("x2", rep.p1.x)
+    rightMirror.setAttribute("y2", rep.p1.y)
+
+    lep = endpoints(model.leftMirror)
+    leftMirror.setAttribute("x1", lep.p0.x)
+    leftMirror.setAttribute("y1", lep.p0.y)
+    leftMirror.setAttribute("x2", lep.p1.x)
+    leftMirror.setAttribute("y2", lep.p1.y)
 }
 
 function drawMirror(mirror){
@@ -145,6 +209,11 @@ function drawMirror(mirror){
     ctx.arc(ep.p1.x, ep.p1.y, 5, 0, 2*Math.PI)
     ctx.fillStyle = "red"
     ctx.fill()
+}
+
+function updateSVGHead(){
+    head.setAttribute("cx", model.head.x)
+    head.setAttribute("cy", model.head.y)
 }
 
 function drawHead(){
@@ -210,4 +279,10 @@ function draw(){
     drawMirrorArea(model.head, model.leftMirror, "brown")
     drawMirrorArea(model.head, model.rightMirror, "brown")
 }
+
+function initSVG(){
+    updateSVGHead()
+    updateSVGMirrors()
+}
+initSVG()
 draw()
