@@ -18,13 +18,13 @@ sanvas = document.getElementById("sdisp")
 head = document.getElementById("head")
 
 centerMirror = document.getElementById("center-mirror")
-centerMirrorAC = document.getElementById("center-mirror-ac")
-centerMirrorAR = document.getElementById("center-mirror-ar")
-centerMirrorAL = document.getElementById("center-mirror-al")
-
+centerMirrorArea = document.getElementById("center-mirror-area")
 
 leftMirror = document.getElementById("left-mirror")
+leftMirrorArea = document.getElementById("left-mirror-area")
+
 rightMirror = document.getElementById("right-mirror")
+rightMirrorArea = document.getElementById("right-mirror-area")
 
 centerSlider = document.getElementById("centerSlider")
 centerSlider.oninput = function () {
@@ -162,43 +162,53 @@ function getMirrorCenter(mirror){
     }
 }
 
-function updateSVGMirrors(){
+function updateSingleMirror(htmlMirror, htmlLine, modelMirror){
+    ep = endpoints(modelMirror)
+    htmlMirror.setAttribute("x1", ep.p0.x)
+    htmlMirror.setAttribute("y1", ep.p0.y)
+    htmlMirror.setAttribute("x2", ep.p1.x)
+    htmlMirror.setAttribute("y2", ep.p1.y)
 
-    // update the mirror itself
-    cep = endpoints(model.centerMirror)
-    centerMirror.setAttribute("x1", cep.p0.x)
-    centerMirror.setAttribute("y1", cep.p0.y)
-    centerMirror.setAttribute("x2", cep.p1.x)
-    centerMirror.setAttribute("y2", cep.p1.y)
-
-    // Update the middle path head -> mirror center and its reflection
-    headToCenterMirrorCenter = {
-        x: model.centerMirror.pos.x - model.head.x,
-        y: model.centerMirror.pos.y - model.head.y
+    headToMirrorCenter = {
+        x: modelMirror.pos.x - model.head.x,
+        y: modelMirror.pos.y - model.head.y
     }
-    reflectedHeadToCenterMirrorCenter = reflectDirection(headToCenterMirrorCenter, normal(model.centerMirror.angle))
-    const xf = model.centerMirror.pos.x + 4 * reflectedHeadToCenterMirrorCenter.x
-    const yf = model.centerMirror.pos.y + 4 * reflectedHeadToCenterMirrorCenter.y
-    d = `M ${model.head.x} ${model.head.y} L ${model.centerMirror.pos.x} ${model.centerMirror.pos.y} L ${xf} ${yf}`
-    centerMirrorAC.setAttribute("d", d)
+    reflectedLine = reflectDirection(
+        headToMirrorCenter,
+        normal(modelMirror.angle)
+    )
+    const xfc = modelMirror.pos.x + 100 * reflectedLine.x
+    const yfc = modelMirror.pos.y + 100 * reflectedLine.y
 
-    // TODO: Same thing for path head -> mirror first endpoint and its reflection
-    // TODO: Same thing for path head -> mirror second endpoint and its reflection
+    headToMirrorEndpoint0 = {
+        x: ep.p0.x - model.head.x,
+        y: ep.p0.y - model.head.y
+    }
+    reflectedLine = reflectDirection(
+        headToMirrorEndpoint0,
+        normal(modelMirror.angle + modelMirror.curvature)
+    )
+    const xf0 = modelMirror.pos.x + 100 * reflectedLine.x
+    const yf0 = modelMirror.pos.y + 100 * reflectedLine.y
 
-    // Final todo: stare at this and generalize to other mirrors maybe something
-    // like updateMirror(htmlElement, modelMirror) until then, I'll at least
-    // place the mirrors:
-    rep = endpoints(model.rightMirror)
-    rightMirror.setAttribute("x1", rep.p0.x)
-    rightMirror.setAttribute("y1", rep.p0.y)
-    rightMirror.setAttribute("x2", rep.p1.x)
-    rightMirror.setAttribute("y2", rep.p1.y)
+    headToMirrorEndpoint1 = {
+        x: ep.p1.x - model.head.x,
+        y: ep.p1.y - model.head.y
+    }
+    reflectedLine = reflectDirection(
+        headToMirrorEndpoint1,
+        normal(modelMirror.angle - modelMirror.curvature)
+    )
+    const xf1 = modelMirror.pos.x + 100 * reflectedLine.x
+    const yf1 = modelMirror.pos.y + 100 * reflectedLine.y
+    d = `M ${model.head.x} ${model.head.y} L ${modelMirror.pos.x} ${modelMirror.pos.y} L ${xfc} ${yfc} M ${model.head.x} ${model.head.y} L ${ep.p0.x} ${ep.p0.y} L ${xf0} ${yf0} M ${model.head.x} ${model.head.y} L ${ep.p1.x} ${ep.p1.y} L ${xf1} ${yf1}`
+    htmlLine.setAttribute("d", d)
+}
 
-    lep = endpoints(model.leftMirror)
-    leftMirror.setAttribute("x1", lep.p0.x)
-    leftMirror.setAttribute("y1", lep.p0.y)
-    leftMirror.setAttribute("x2", lep.p1.x)
-    leftMirror.setAttribute("y2", lep.p1.y)
+function updateSVGMirrors(){
+    updateSingleMirror(centerMirror, centerMirrorArea, model.centerMirror)
+    updateSingleMirror(leftMirror, leftMirrorArea, model.leftMirror)
+    updateSingleMirror(rightMirror, rightMirrorArea, model.rightMirror)
 }
 
 function drawMirror(mirror){
