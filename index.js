@@ -1,13 +1,13 @@
-headBase = {x: 70, y:70}
+headBase = {x: 170, y:70}
 model = {
     head: {x:headBase.x, y:headBase.y},
     // TODO: angle: {value: 1.88, min: N, max: N}
     //       then I have to add the sliders using JS maybe
     //       or create them in HTML but set their min/max values using JS
     //       If I do that I'll have everything setup here
-    centerMirror: {pos: {x: 100, y: 30}, angle: 1.88, width: 20, curvature: 0},
-    leftMirror: {pos: {x: 40, y: 30}, angle: 1.40, width: 20, curvature: 0},
-    rightMirror: {pos: {x: 210, y: 30}, angle: 2.24, width: 20, curvature: 0},
+    centerMirror: {pos: {x: 200, y: 30}, angle: 1.88, width: 20, curvature: 0},
+    leftMirror: {pos: {x: 140, y: 30}, angle: 1.40, width: 20, curvature: 0},
+    rightMirror: {pos: {x: 310, y: 30}, angle: 2.24, width: 20, curvature: 0},
 };
 
 
