@@ -1,0 +1,19 @@
+/* Using https://stackoverflow.com/a/43806724/5795941 but I don't get
+how it works.  Like why can't I set the image to an absolute postion? */
+
+.img-underlay-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.img-underlay-wrap img {
+    display: block;
+    max-width: 100%;
+    height: 500px;
+}
+
+.img-underlay-wrap svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

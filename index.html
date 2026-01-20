@@ -2,22 +2,27 @@
 <html>
     <head>
         <title>Car mirrors</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
 
-        <canvas id="disp" height="300" width="400"></canvas>
-        <svg id="sdisp" height="300" width="400">
-            <circle id="head" cx="50" cy="50" r="10" style="fill:blue;" />
+        <div class="img-underlay-wrap">
+            <img src="car.png" scale="0.2"/>
+            <svg id="sdisp" height="300" width="400">
 
-            <line id="center-mirror" stroke="green" stroke-width="2"/>
-            <path id="center-mirror-area" stroke="green" stroke-width="2" fill="transparent"/>
+                <line id="center-mirror" stroke="green" stroke-width="2"/>
+                <path id="center-mirror-area" stroke="green" stroke-width="2" fill="transparent"/>
 
-            <line id="left-mirror" stroke="blue" stroke-width="2"/>
-            <path id="left-mirror-area" stroke="blue" stroke-width="2" fill="transparent"/>
+                <line id="left-mirror" stroke="blue" stroke-width="2"/>
+                <path id="left-mirror-area" stroke="blue" stroke-width="2" fill="transparent"/>
 
-            <line id="right-mirror" stroke="red" stroke-width="2"/>
-            <path id="right-mirror-area" stroke="red" stroke-width="2" fill="transparent"/>
-        </svg> <br>
+                <line id="right-mirror" stroke="red" stroke-width="2"/>
+                <path id="right-mirror-area" stroke="red" stroke-width="2" fill="transparent"/>
+
+                <circle id="head" cx="50" cy="50" r="10" style="fill:blue;" />
+            </svg>
+        </div>
+        <br>
 
         <input id="centerSlider" type="range" min="-314.15" max="314.15" value="188"> Center Mirror Angle <br>
         <input id="rightSlider" type="range" min="-314.15" max="314.15" value="224"> Right Mirror Angle <br>
