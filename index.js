@@ -50,18 +50,21 @@ leftSlider.oninput = function () {
 centerCurvatureSlider = document.getElementById("centerCurvatureSlider")
 centerCurvatureSlider.oninput = function () {
     model.centerMirror.curvature = this.value / 20.0
+    updateSVGMirrors()
     draw()
 }
 
 rightCurvatureSlider = document.getElementById("rightCurvatureSlider")
 rightCurvatureSlider.oninput = function () {
     model.rightMirror.curvature = this.value / 20.0
+    updateSVGMirrors()
     draw()
 }
 
 leftCurvatureSlider = document.getElementById("leftCurvatureSlider")
 leftCurvatureSlider.oninput = function () {
     model.leftMirror.curvature = this.value / 20.0
+    updateSVGMirrors()
     draw()
 }
 
@@ -76,12 +79,14 @@ centerWidthSlider.oninput = function () {
 rightWidthSlider = document.getElementById("rightWidthSlider")
 rightWidthSlider.oninput = function () {
     model.rightMirror.width = this.value
+    updateSVGMirrors()
     draw()
 }
 
 leftWidthSlider = document.getElementById("leftWidthSlider")
 leftWidthSlider.oninput = function () {
     model.leftMirror.width = this.value
+    updateSVGMirrors()
     draw()
 }
 
@@ -89,12 +94,14 @@ headXOffset = document.getElementById("headXOffset")
 headXOffset.oninput = function () {
     model.head.x = headBase.x + this.value / 3.0
     updateSVGHead()
+    updateSVGMirrors()
     draw() // Not necessary for SVG
 }
 headYOffset = document.getElementById("headYOffset")
 headYOffset.oninput = function () {
     model.head.y = headBase.y + this.value / 3.0
     updateSVGHead()
+    updateSVGMirrors()
     draw() // Not necessary for SVG
 }
 ctx = canvas.getContext("2d")
